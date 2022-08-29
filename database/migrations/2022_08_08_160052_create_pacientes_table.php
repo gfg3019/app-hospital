@@ -15,10 +15,14 @@ class CreatePacientesTable extends Migration
     {
         Schema::create('pacientes', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('endereco_id');
             $table->string('nome', 30);
             $table->char('sexo', 1);
+            $table->string('telefone', 15);
             $table->string('email', 50);
             $table->date('data_nascimento');
+            $table->foreign('endereco_id')->references('id')->on('enderecos');
+            $table->unique('endereco_id');
             $table->timestamps();
         });
     }

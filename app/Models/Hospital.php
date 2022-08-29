@@ -16,6 +16,16 @@ class Hospital extends Model
         'telefone',
         'email'
     ];
+    public function endereco()
+    {
+        return $this->belongsTo(Endereco::class, 'endereco_id');
+    }
+
+    public function consultas()
+    {
+        return $this->hasMany(Consulta::class, 'hospital_id');
+    }
 
 }
-//$h = Hospital::create(['nome'=>'Hospital da Posse', 'instituicao'=>'publica', 'id_endereco'=>'2', 'telefone'=>'(21) 4444-4444', 'email'=>'hospt.sep@email.com']);
+
+

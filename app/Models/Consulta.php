@@ -10,12 +10,25 @@ class Consulta extends Model
     use HasFactory;
     protected $table = 'consultas';
     protected $fillable = [
-        'id_paciente',
-        'id_medico',
-        'id_hospital',
+        'paciente_id',
+        'medico_id',
+        'hospital_id',
         'data',
         'diagnostico',
     ];
-}
 
-// $c = Consulta::create(['id_paciente' => '1', 'id_medico' => '1', 'id_hospital' => '1', 'data'=>'2022-08-12 15:13:22', 'diagnostico'=>'Esse é um diagnostico']);
+    public function paciente()
+    {
+        return $this->belongsTo(Paciente::class, 'paciente_id');
+    }
+
+    public function medico()
+    {
+        return $this->belongsTo(Medico::class, 'medico_id');
+    }
+
+    public function hospital()
+    {
+        return $this->belongsTo(Hospital::class, 'hospital_id');
+    }
+}

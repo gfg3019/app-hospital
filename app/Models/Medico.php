@@ -10,13 +10,22 @@ class Medico extends Model
     use HasFactory;
     protected $table = 'medicos';
     protected $fillable = [
+        'endereco_id',
         'nome',
         'sexo',
         'especialidade',
         'telefone',
         'funcionario',
         'email',
-        'id_endereco'
     ];
+    public function endereco()
+    {
+        return $this->belongsTo(Endereco::class, 'endereco_id');
+    }
+
+    public function consulta()
+    {
+        return $this->hasMany(Consulta::class, 'consulta_id');
+    }
 }
-//['nome'=>'','sexo'=>'','especialidade'=>'','telefone'=>'','funcionario'=>'','email'=>'','id_endereco'=>''];
+

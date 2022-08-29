@@ -11,11 +11,15 @@ class Internacao extends Model
 
     protected $table = 'internacoes';
     protected $fillable = [
+        'consulta_id',
         'entrada',
         'quarto',
         'saida',
         'observacoes',
-        'id_consulta'
     ];
+
+    public function consulta()
+    {
+        return $this->belongsTo(Consulta::class, 'consulta_id');
+    }
 }
-//$i = Internacao::create(['entrada' => '2022-08-13 12:30:00', 'quarto'=>'43', 'saida'=>'2022-08-25 14:30:25', 'observacoes'=>'Essa é uma observação', 'id_consulta'=>'1']);

@@ -15,8 +15,12 @@ class CreateHospitaisTable extends Migration
     {
         Schema::create('hospitais', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('endereco_id');
             $table->string('nome', 50);
+            $table->string('telefone', 15);
+            $table->string('email', 50);
             $table->enum('instituicao', ['publica', 'privada']);
+            $table->foreign('endereco_id')->references('id')->on('enderecos');
             $table->timestamps();
         });
     }
