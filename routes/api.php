@@ -17,9 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
 Route::post('/paciente/store', [App\Http\Controllers\PacienteController::class, 'store'])->name('paciente.store');
-Route::get('/paciente', [App\Http\Controllers\PacienteController::class, 'exibirPacientes']);
-Route::get('/paciente/{id}', [App\Http\Controllers\PacienteController::class, 'exibirPacienteId'])->name('exibi_pacinte');
+Route::get('/paciente/show/{id}', [App\Http\Controllers\PacienteController::class, 'show'])->name('paciente.show');
 
 Route::post('/endereco', [App\Http\Controllers\EnderecoController::class, 'saveEndereco']);
 Route::get('/endereco/{id}', [App\Http\Controllers\EnderecoController::class, 'exibiEndereco']);

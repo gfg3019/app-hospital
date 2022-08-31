@@ -18,8 +18,26 @@ class PacienteController extends Controller
         //return Paciente::showPacientes();
     }
 
-    public function store(Request $request)
+    public static function store(Request $request)
     {
+        $request->validate([
+            'logradouro' => 'required',
+            'numero' => 'required',
+            'cep' => 'required',
+            'bairro' => 'required',
+            'cidade' => 'required',
+            'uf' => 'required',
+            'endereco_id' => 'required',
+            'nome' => 'required',
+            'sexo' => 'required',
+            'telefone' => 'required',
+            'email' => 'required',
+            'data_nascimento' => 'required',
+        ],[
+            'required' => 'O campo preciza ser preenchido'
+        ]);
+
+
         DB::beginTransaction();
         try {
             $novoEndereco = Endereco::create([
@@ -53,5 +71,14 @@ class PacienteController extends Controller
             DB::rollback();
             return response()->json($th->getMessage(), 403);
         }
+    }
+
+    public static function show(Request $request, $id){
+        $paciente = Paciente::find($id);
+        $result = $paciente->where('id', $id);
+
+        return response()->json($result->with(['endereco', function($query){
+            $query->select('id','logradouro', 'numero', 'complemento', 'cep', 'bairro', 'cidade', 'uf');
+        }])->get(), 200);
     }
 }
