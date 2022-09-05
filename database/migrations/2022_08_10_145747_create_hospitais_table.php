@@ -20,7 +20,11 @@ class CreateHospitaisTable extends Migration
             $table->string('telefone', 15);
             $table->string('email', 50);
             $table->enum('instituicao', ['publica', 'privada']);
-            $table->foreign('endereco_id')->references('id')->on('enderecos');
+            $table->foreign('endereco_id')
+                ->references('id')
+                ->on('enderecos')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

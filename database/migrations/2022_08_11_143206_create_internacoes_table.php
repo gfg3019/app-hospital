@@ -20,7 +20,11 @@ class CreateInternacoesTable extends Migration
             $table->integer('quarto');
             $table->dateTime('saida');
             $table->text('observacoes');
-            $table->foreign('consulta_id')->references('id')->on('consultas');
+            $table->foreign('consulta_id')
+                ->references('id')
+                ->on('consultas')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->unique('consulta_id');
             $table->timestamps();
         });

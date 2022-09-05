@@ -11,33 +11,8 @@ use App\Models\Endereco;
 class PacienteController extends Controller
 {
 
-    //protected $modelPaciente = Paciente::class;
-
-    public static function exibirPacientes()
-    {
-        //return Paciente::showPacientes();
-    }
-
     public static function store(Request $request)
     {
-        $request->validate([
-            'logradouro' => 'required',
-            'numero' => 'required',
-            'cep' => 'required',
-            'bairro' => 'required',
-            'cidade' => 'required',
-            'uf' => 'required',
-            'endereco_id' => 'required',
-            'nome' => 'required',
-            'sexo' => 'required',
-            'telefone' => 'required',
-            'email' => 'required',
-            'data_nascimento' => 'required',
-        ],[
-            'required' => 'O campo preciza ser preenchido'
-        ]);
-
-
         DB::beginTransaction();
         try {
             $novoEndereco = Endereco::create([
@@ -65,7 +40,7 @@ class PacienteController extends Controller
 
             DB::commit();
 
-            return response()->json($novoPaciente, 200);
+            return response()->json($novoPaciente->with('endereco')->get(), 200);
 
         } catch (\Throwable $th) {
             DB::rollback();
@@ -74,11 +49,74 @@ class PacienteController extends Controller
     }
 
     public static function show(Request $request, $id){
-        $paciente = Paciente::find($id);
-        $result = $paciente->where('id', $id);
+        try
+        {
+            $paciente = Paciente::find($id);
+            $result = $paciente->where('id', $id)->with('endereco')->get();
+            return response()->json($result, 200);
 
-        return response()->json($result->with(['endereco', function($query){
-            $query->select('id','logradouro', 'numero', 'complemento', 'cep', 'bairro', 'cidade', 'uf');
-        }])->get(), 200);
+        } catch (\Throwable $th)
+        {
+            return response()->json($th->getMessage(), 403);
+        }
+    }
+
+    public static function showAll()
+    {
+        try
+        {
+            $paciente = Paciente::with('endereco')->get();
+            return response()->json($paciente, 200);
+
+        } catch (\Throwable $th)
+        {
+            return response()->json($th->getMessage(), 403);
+        }
+    }
+
+    public static function updatePatiente(Request $request, $id)
+    {
+        /**
+         * Primeiro eu vou pegar o id de endereco
+         * Depois eu vou colocar os atributos de endereco
+         * Vou chamar os atributos do objeto paciente
+         * e vou atulizar todos eles
+         */
+
+        DB::beginTransaction();
+        try {
+            $endereco = Endereco::find($id);
+            $endereco->fill([
+                'logradouro'=> $request->logradouro,
+                'numero' => $request->numero,
+                'complemento'=> $request->complemento,
+                'cep' => $request->cep,
+                'bairro' => $request->bairro,
+                'cidade' => $request->cidade,
+                'uf' => $request->uf,
+            ]);
+
+            $paciente = Paciente::find($id);
+            $paciente->fill([
+                'endereco_id' => $endereco->id,
+                'nome' => $request->nome,
+                'sexo' => $request->sexo,
+                'telefone' => $request->telefone,
+                'email' => $request->email,
+                'data_nascimento' => $request->data_nascimento,
+            ])->with('endereco')->first();
+            $endereco->save();
+            $paciente->save();
+            DB::commit();
+            return true;
+        } catch (Throwable $th) {
+            return response()->json($th->getMessage(), 403);
+        }
+    }
+
+    public static function deletePatiente(Request $request, $id)
+    {
+        $endereco = Endereco::where('id', $id)->delete();
+        $paciente = Paciente::where('id', $id)->delete();
     }
 }

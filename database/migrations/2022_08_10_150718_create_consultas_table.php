@@ -17,15 +17,27 @@ class CreateConsultasTable extends Migration
             $table->id();
 
             $table->unsignedBigInteger('paciente_id');
-            $table->foreign('paciente_id')->references('id')->on('pacientes');
+            $table->foreign('paciente_id')
+                ->references('id')
+                ->on('pacientes')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->unique('paciente_id');
 
             $table->unsignedBigInteger('medico_id');
-            $table->foreign('medico_id')->references('id')->on('medicos');
+            $table->foreign('medico_id')
+                ->references('id')
+                ->on('medicos')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->unique('medico_id');
 
             $table->unsignedBigInteger('hospital_id');
-            $table->foreign('hospital_id')->references('id')->on('hospitais');
+            $table->foreign('hospital_id')
+                ->references('id')
+                ->on('hospitais')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->unique('hospital_id');
 
             $table->dateTime('data');

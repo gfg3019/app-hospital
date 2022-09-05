@@ -21,7 +21,11 @@ class CreatePacientesTable extends Migration
             $table->string('telefone', 15);
             $table->string('email', 50);
             $table->date('data_nascimento');
-            $table->foreign('endereco_id')->references('id')->on('enderecos');
+            $table->foreign('endereco_id')
+                ->references('id')
+                ->on('enderecos')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->unique('endereco_id');
             $table->timestamps();
         });

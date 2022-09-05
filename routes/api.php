@@ -20,8 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/paciente/store', [App\Http\Controllers\PacienteController::class, 'store'])->name('paciente.store');
 Route::get('/paciente/show/{id}', [App\Http\Controllers\PacienteController::class, 'show'])->name('paciente.show');
+Route::get('/paciente/showAll', [App\Http\Controllers\PacienteController::class, 'showAll'])->name('paciente.showall');
+Route::put('/paciente/update/{id}', [App\Http\Controllers\PacienteController::class, 'updatePatiente'])->name('paciente.update');
+Route::delete('/paciente/delete/{id}', [App\Http\Controllers\PacienteController::class, 'deletePatiente'])->name('paciente.delete');
 
-Route::post('/endereco', [App\Http\Controllers\EnderecoController::class, 'saveEndereco']);
-Route::get('/endereco/{id}', [App\Http\Controllers\EnderecoController::class, 'exibiEndereco']);
-Route::get('/endereco', [App\Http\Controllers\EnderecoController::class, 'exibiEndereco']);
-Route::get('/endereco', [App\Http\Controllers\EnderecoController::class, 'exibiEnderecoAll']);
